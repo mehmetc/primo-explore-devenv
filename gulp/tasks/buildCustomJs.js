@@ -34,7 +34,8 @@ function buildByConcatination() {
     return gulp.src([buildParams.customModulePath(),buildParams.mainPath(),buildParams.customNpmJsPath(),'!'+buildParams.customPath(),'!'+buildParams.customNpmJsModulePath(),'!'+buildParams.customNpmJsCustomPath()])
         .pipe(concat(buildParams.customFile))
         .pipe(babel({
-            presets: ['es2015']
+            presets: ['es2015'],
+	    plugins: ["transform-html-import-to-string"]
         }))
         .on("error", function(err) {
             if (err && err.codeFrame) {
@@ -59,7 +60,7 @@ function buildByBrowserify() {
             buildParams.viewJsDir()+'/node_modules'
         ]
     })
-        .transform("babelify",{presets: ["es2015"]})
+        .transform("babelify",{presets: ["es2015"], plugins: ["transform-html-import-to-string"]})
         .bundle()
         .pipe(fs.createWriteStream(buildParams.customPath()));
 }
